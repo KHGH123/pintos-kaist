@@ -27,6 +27,40 @@ static bool load (const char *file_name, struct intr_frame *if_);
 static void initd (void *f_name);
 static void __do_fork (void *);
 
+static void
+argument_passing (const char *file_name, struct intr_frame *if_) {
+	uintptr_t ptr[32];
+	char *token[32];
+	char *save_ptr;
+	int cnt = 0;
+	uintptr_t temp;
+	
+	for (token[cnt] = strtok_r (file_name, " ", &save_ptr); token[cnt] != NULL; cnt++, token[cnt] = strtok_r (NULL, " ", &save_ptr))
+		;
+	if_->R.rdi = cnt;
+
+	for (int i = cnt - 1; i >= 0; i--) {
+		if_->rsp -= (strlen(token[i]) + 1);
+		memcpy ((void *)if_->rsp, token[i], strlen(token[i]) + 1);
+		ptr[i] = if_->rsp;
+	}
+
+	temp = if_->rsp % 8;
+	if_->rsp -= temp;
+	memset ((void *)if_->rsp, 0, temp);
+
+	if_->rsp -= 8;
+	memset ((void *)if_->rsp, 0, 8);
+
+	for (int i = cnt - 1; i >= 0; i--) {
+		if_->rsp -= 8;
+		*((uintptr_t *)if_->rsp) = ptr[i];
+	}
+	if_->R.rsi = if_->rsp;
+
+	if_->rsp -= 8;
+	memset ((void *)if_->rsp, 0, 8);
+}
 /* General process initializer for initd and other process. */
 static void
 process_init (void) {
@@ -42,9 +76,9 @@ tid_t
 process_create_initd (const char *file_name) {
 	char *fn_copy;
 	tid_t tid;
-
 	/* Make a copy of FILE_NAME.
 	 * Otherwise there's a race between the caller and load(). */
+	
 	fn_copy = palloc_get_page (0);
 	if (fn_copy == NULL)
 		return TID_ERROR;
@@ -63,7 +97,6 @@ initd (void *f_name) {
 #ifdef VM
 	supplemental_page_table_init (&thread_current ()->spt);
 #endif
-
 	process_init ();
 
 	if (process_exec (f_name) < 0)
@@ -193,7 +226,9 @@ process_exec (void *f_name) {
 /* Waits for thread TID to die and returns its exit status.  If
  * it was terminated by the kernel (i.e. killed due to an
  * exception), returns -1.  If TID is invalid or if it was not a
- * child of the calling process, or if process_wait() has already
+ * child of the calling process, or if process_
+ * 
+ * () has already
  * been successfully called for the given TID, returns -1
  * immediately, without waiting.
  *
@@ -204,6 +239,7 @@ process_wait (tid_t child_tid UNUSED) {
 	/* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
+	while (1) {}
 	return -1;
 }
 
@@ -329,6 +365,8 @@ load (const char *file_name, struct intr_frame *if_) {
 	bool success = false;
 	int i;
 
+	char fname[64];
+
 	/* Allocate and activate page directory. */
 	t->pml4 = pml4_create ();
 	if (t->pml4 == NULL)
@@ -336,9 +374,14 @@ load (const char *file_name, struct intr_frame *if_) {
 	process_activate (thread_current ());
 
 	/* Open executable file. */
-	file = filesys_open (file_name);
+	for (int i = 0; file_name[i] != ' '; i++) {
+		fname[i] = file_name[i];
+	}
+	fname[i] = '\0';
+
+	file = filesys_open (fname);
 	if (file == NULL) {
-		printf ("load: %s: open failed\n", file_name);
+		printf ("load: %s: open failed\n", fname);
 		goto done;
 	}
 
@@ -365,6 +408,7 @@ load (const char *file_name, struct intr_frame *if_) {
 
 		if (file_read (file, &phdr, sizeof phdr) != sizeof phdr)
 			goto done;
+		
 		file_ofs += sizeof phdr;
 		switch (phdr.p_type) {
 			case PT_NULL:
@@ -398,24 +442,27 @@ load (const char *file_name, struct intr_frame *if_) {
 						zero_bytes = ROUND_UP (page_offset + phdr.p_memsz, PGSIZE);
 					}
 					if (!load_segment (file, file_page, (void *) mem_page,
-								read_bytes, zero_bytes, writable))
+								read_bytes, zero_bytes, writable)) {
 						goto done;
+								}
 				}
 				else
 					goto done;
 				break;
 		}
 	}
-
 	/* Set up stack. */
 	if (!setup_stack (if_))
 		goto done;
 
 	/* Start address. */
 	if_->rip = ehdr.e_entry;
-
+	
 	/* TODO: Your code goes here.
 	 * TODO: Implement argument passing (see project2/argument_passing.html). */
+	argument_passing (file_name, if_);
+
+	hex_dump(if_->rsp, if_->rsp, USER_STACK - (uint64_t)if_->rsp, true);
 
 	success = true;
 

@@ -20,6 +20,8 @@
 /* Number of timer ticks since OS booted. */
 static int64_t ticks;
 
+static struct list blocked_list;
+
 /* Number of loops per timer tick.
    Initialized by timer_calibrate(). */
 static unsigned loops_per_tick;
@@ -34,6 +36,8 @@ static void real_time_sleep (int64_t num, int32_t denom);
    corresponding interrupt. */
 void
 timer_init (void) {
+
+	list_init (&blocked_list);
 	/* 8254 input frequency divided by TIMER_FREQ, rounded to
 	   nearest. */
 	uint16_t count = (1193180 + TIMER_FREQ / 2) / TIMER_FREQ;
@@ -90,11 +94,38 @@ timer_elapsed (int64_t then) {
 /* Suspends execution for approximately TICKS timer ticks. */
 void
 timer_sleep (int64_t ticks) {
-	int64_t start = timer_ticks ();
+
+	thread_current ()->start = timer_ticks ();
+	thread_current ()->bl_ticks = ticks;
+	
+	// int64_t start = timer_ticks ();
 
 	ASSERT (intr_get_level () == INTR_ON);
-	while (timer_elapsed (start) < ticks)
-		thread_yield ();
+
+	// busy_waiting
+	/* while (timer_elapsed (start) < ticks)
+		thread_yield (); */
+
+	list_push_back (&blocked_list, &thread_current ()->elem);
+	intr_disable ();
+	thread_block ();
+	intr_enable ();
+}
+
+void
+sleep_wakeup() {
+	struct thread *tail =
+	       list_empty(&blocked_list) ? NULL : list_entry(list_back (&blocked_list), struct thread, elem);
+	
+	while (tail && !list_empty (&blocked_list)) {
+		struct thread *idx = list_entry (list_pop_front (&blocked_list), struct thread, elem);
+		if(timer_elapsed (idx->start) >= idx->bl_ticks) 
+			thread_unblock (idx);
+		else
+			list_push_back (&blocked_list, &idx->elem);
+
+		if(idx == tail) break;
+	}
 }
 
 /* Suspends execution for approximately MS milliseconds. */
@@ -111,7 +142,7 @@ timer_usleep (int64_t us) {
 
 /* Suspends execution for approximately NS nanoseconds. */
 void
-timer_nsleep (int64_t ns) {
+timer_nsleep (int64_t  ns) {
 	real_time_sleep (ns, 1000 * 1000 * 1000);
 }
 
@@ -120,12 +151,13 @@ void
 timer_print_stats (void) {
 	printf ("Timer: %"PRId64" ticks\n", timer_ticks ());
 }
-
+
 /* Timer interrupt handler. */
 static void
 timer_interrupt (struct intr_frame *args UNUSED) {
 	ticks++;
 	thread_tick ();
+	sleep_wakeup ();
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer
@@ -151,6 +183,7 @@ too_many_loops (unsigned loops) {
 
    Marked NO_INLINE because code alignment can significantly
    affect timings, so that if this function was inlined
+:q
    differently in different places the results would be difficult
    to predict. */
 static void NO_INLINE

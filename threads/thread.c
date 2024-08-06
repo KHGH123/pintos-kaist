@@ -79,12 +79,32 @@ static tid_t allocate_tid (void);
 // setup temporal gdt first.
 static uint64_t gdt[3] = { 0, 0x00af9a000000ffff, 0x00cf92000000ffff };
 
+bool
+priority_less (const struct list_elem *a_, const struct list_elem *b_,
+		void *aux UNUSED)
+{
+	const struct thread *a = list_entry (a_, struct thread, elem);
+	const struct thread *b = list_entry (b_, struct thread, elem);
+
+	return a->priority < b->priority;
+}
+
+bool
+priority_more (const struct list_elem *a_, const struct list_elem *b_,
+		void *aux UNUSED)
+{
+	const struct thread *a = list_entry (a_, struct thread, elem);
+	const struct thread *b = list_entry (b_, struct thread, elem);
+
+	return a->priority > b->priority;
+}
+
 /* Initializes the threading system by transforming the code
    that's currently running into a thread.  This can't work in
    general and it is possible in this case only because loader.S
    was careful to put the bottom of the stack at a page boundary.
 
-   Also initializes the run queue and the tid lock.
+Also initializes the run queue and the tid lock.
 
    After calling this function, be sure to initialize the page
    allocator before trying to create any threads with
@@ -108,6 +128,7 @@ thread_init (void) {
 	/* Init the globla thread context */
 	lock_init (&tid_lock);
 	list_init (&ready_list);
+	// list_init (get_blocked_list ());
 	list_init (&destruction_req);
 
 	/* Set up a thread structure for the running thread. */
@@ -138,7 +159,7 @@ thread_start (void) {
 void
 thread_tick (void) {
 	struct thread *t = thread_current ();
-
+	
 	/* Update statistics. */
 	if (t == idle_thread)
 		idle_ticks++;
@@ -181,7 +202,7 @@ thread_create (const char *name, int priority,
 		thread_func *function, void *aux) {
 	struct thread *t;
 	tid_t tid;
-
+	
 	ASSERT (function != NULL);
 
 	/* Allocate thread. */
@@ -206,7 +227,7 @@ thread_create (const char *name, int priority,
 
 	/* Add to run queue. */
 	thread_unblock (t);
-
+	thread_check ();
 	return tid;
 }
 
@@ -304,14 +325,40 @@ thread_yield (void) {
 	old_level = intr_disable ();
 	if (curr != idle_thread)
 		list_push_back (&ready_list, &curr->elem);
+	
 	do_schedule (THREAD_READY);
+	intr_set_level (old_level);
+}
+
+void
+thread_check (void) {
+	enum intr_level old_level;
+	struct thread *curr = thread_current ();
+
+	if (intr_context ()) return;
+	old_level = intr_disable ();
+	if (!list_empty (&ready_list)) {
+		struct thread *next = 
+			list_entry (list_max (&ready_list, priority_less, NULL), struct thread, elem);
+		if (curr->priority < next->priority) {
+			// if (intr_context ()) return;
+			thread_yield ();
+		}
+	}
 	intr_set_level (old_level);
 }
 
 /* Sets the current thread's priority to NEW_PRIORITY. */
 void
 thread_set_priority (int new_priority) {
-	thread_current ()->priority = new_priority;
+	if(thread_get_priority () == thread_current ()->prio_orig) {
+		thread_current ()->priority = new_priority;
+		thread_current ()->prio_orig = new_priority;
+	}
+	else
+		thread_current ()->prio_orig = new_priority;
+
+	thread_check ();
 }
 
 /* Returns the current thread's priority. */
@@ -408,6 +455,8 @@ init_thread (struct thread *t, const char *name, int priority) {
 	strlcpy (t->name, name, sizeof t->name);
 	t->tf.rsp = (uint64_t) t + PGSIZE - sizeof (void *);
 	t->priority = priority;
+	t->prio_orig = priority;
+	t->failed_lock = NULL;
 	t->magic = THREAD_MAGIC;
 }
 
@@ -420,8 +469,13 @@ static struct thread *
 next_thread_to_run (void) {
 	if (list_empty (&ready_list))
 		return idle_thread;
-	else
-		return list_entry (list_pop_front (&ready_list), struct thread, elem);
+	else {
+		struct list_elem * e = list_max (&ready_list, priority_less, NULL);
+		struct thread * next = list_entry (e, struct thread, elem);
+		list_remove (e);
+
+		return next; 
+	}
 }
 
 /* Use iretq to launch the thread */
@@ -530,8 +584,9 @@ do_schedule(int status) {
 	ASSERT (intr_get_level () == INTR_OFF);
 	ASSERT (thread_current()->status == THREAD_RUNNING);
 	while (!list_empty (&destruction_req)) {
-		struct thread *victim =
-			list_entry (list_pop_front (&destruction_req), struct thread, elem);
+		struct list_elem * e = list_max (&destruction_req, priority_less, NULL);
+		struct thread * victim = list_entry (e, struct thread, elem);
+		list_remove (e);
 		palloc_free_page(victim);
 	}
 	thread_current ()->status = status;

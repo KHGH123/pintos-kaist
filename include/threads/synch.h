@@ -4,6 +4,8 @@
 #include <list.h>
 #include <stdbool.h>
 
+struct list *get_blocked_list (void);
+
 /* A counting semaphore. */
 struct semaphore {
 	unsigned value;             /* Current value. */
@@ -16,6 +18,7 @@ bool sema_try_down (struct semaphore *);
 void sema_up (struct semaphore *);
 void sema_self_test (void);
 
+
 /* Lock. */
 struct lock {
 	struct thread *holder;      /* Thread holding lock (for debugging). */
@@ -27,6 +30,8 @@ void lock_acquire (struct lock *);
 bool lock_try_acquire (struct lock *);
 void lock_release (struct lock *);
 bool lock_held_by_current_thread (const struct lock *);
+
+void lock_donate(struct thread *, struct lock *);
 
 /* Condition variable. */
 struct condition {
