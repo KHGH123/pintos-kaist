@@ -21,18 +21,16 @@ Formatting file system...done.
 Boot complete.
 Putting 'read-stdout' into the file system...
 Executing 'read-stdout':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  e8 ff 47 47 00 00 00 00-f4 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-72 65 61 64 2d 73 74 64 |........read-std|
-000000004747fff0  6f 75 74 00 72 65 61 64-2d 73 74 64 6f 75 74 00 |out.read-stdout.|
 (read-stdout) begin
+(read-stdout) end
+read-stdout: exit(0)
 Execution of 'read-stdout' complete.
-Timer: 260 ticks
-Thread: 33 idle ticks, 226 kernel ticks, 1 user ticks
+Timer: 61 ticks
+Thread: 33 idle ticks, 28 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 83 reads, 274 writes
 hd1:0: 123 reads, 0 writes
-Console: 1211 characters output
+Console: 908 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

@@ -22,18 +22,17 @@ Boot complete.
 Putting 'read-boundary' into the file system...
 Putting 'sample.txt' into the file system...
 Executing 'read-boundary':
-000000004747ffc0  00 00 00 00 00 00 00 00-e4 ff 47 47 00 00 00 00 |..........GG....|
-000000004747ffd0  f2 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-000000004747ffe0  00 00 00 00 72 65 61 64-2d 62 6f 75 6e 64 61 72 |....read-boundar|
-000000004747fff0  79 00 72 65 61 64 2d 62-6f 75 6e 64 61 72 79 00 |y.read-boundary.|
 (read-boundary) begin
+(read-boundary) open "sample.txt"
+(read-boundary) read() returned 9 instead of 373: FAILED
+read-boundary: exit(1)
 Execution of 'read-boundary' complete.
-Timer: 265 ticks
-Thread: 31 idle ticks, 233 kernel ticks, 1 user ticks
+Timer: 62 ticks
+Thread: 32 idle ticks, 28 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 111 reads, 302 writes
+hd0:1: 116 reads, 302 writes
 hd1:0: 132 reads, 0 writes
-Console: 1284 characters output
+Console: 1056 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

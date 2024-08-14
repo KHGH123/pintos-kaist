@@ -21,18 +21,17 @@ Formatting file system...done.
 Boot complete.
 Putting 'create-null' into the file system...
 Executing 'create-null':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  e8 ff 47 47 00 00 00 00-f4 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-63 72 65 61 74 65 2d 6e |........create-n|
-000000004747fff0  75 6c 6c 00 63 72 65 61-74 65 2d 6e 75 6c 6c 00 |ull.create-null.|
 (create-null) begin
+(create-null) create(NULL): 0
+(create-null) end
+create-null: exit(0)
 Execution of 'create-null' complete.
-Timer: 259 ticks
-Thread: 33 idle ticks, 225 kernel ticks, 1 user ticks
+Timer: 61 ticks
+Thread: 34 idle ticks, 25 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 83 reads, 274 writes
 hd1:0: 123 reads, 0 writes
-Console: 1211 characters output
+Console: 938 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

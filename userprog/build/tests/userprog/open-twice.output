@@ -22,18 +22,18 @@ Boot complete.
 Putting 'open-twice' into the file system...
 Putting 'sample.txt' into the file system...
 Executing 'open-twice':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  ea ff 47 47 00 00 00 00-f5 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-00 00 6f 70 65 6e 2d 74 |..........open-t|
-000000004747fff0  77 69 63 65 00 6f 70 65-6e 2d 74 77 69 63 65 00 |wice.open-twice.|
 (open-twice) begin
+(open-twice) open "sample.txt" once
+(open-twice) open "sample.txt" again
+(open-twice) end
+open-twice: exit(0)
 Execution of 'open-twice' complete.
-Timer: 260 ticks
-Thread: 33 idle ticks, 226 kernel ticks, 1 user ticks
+Timer: 62 ticks
+Thread: 32 idle ticks, 27 kernel ticks, 3 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 110 reads, 288 writes
+hd0:1: 123 reads, 288 writes
 hd1:0: 125 reads, 0 writes
-Console: 1266 characters output
+Console: 1034 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

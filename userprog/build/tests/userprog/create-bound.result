@@ -1,17 +1,1 @@
-FAIL
-Test output failed to match any acceptable form.
-
-Acceptable output:
-  (create-bound) begin
-  (create-bound) create("quux.dat"): 1
-  (create-bound) end
-  create-bound: exit(0)
-Differences in `diff -u' format:
-+ 000000004747ffc0  00 00 00 00 00 00 00 00-e6 ff 47 47 00 00 00 00 |..........GG....|
-+ 000000004747ffd0  f3 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-+ 000000004747ffe0  00 00 00 00 00 00 63 72-65 61 74 65 2d 62 6f 75 |......create-bou|
-+ 000000004747fff0  6e 64 00 63 72 65 61 74-65 2d 62 6f 75 6e 64 00 |nd.create-bound.|
-  (create-bound) begin
-- (create-bound) create("quux.dat"): 1
-- (create-bound) end
-- create-bound: exit(0)
+PASS

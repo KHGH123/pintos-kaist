@@ -1,17 +1,2 @@
 FAIL
-Test output failed to match any acceptable form.
-
-Acceptable output:
-  (read-zero) begin
-  (read-zero) open "sample.txt"
-  (read-zero) end
-  read-zero: exit(0)
-Differences in `diff -u' format:
-+ 000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-+ 000000004747ffd0  ec ff 47 47 00 00 00 00-f6 ff 47 47 00 00 00 00 |..GG......GG....|
-+ 000000004747ffe0  00 00 00 00 00 00 00 00-00 00 00 00 72 65 61 64 |............read|
-+ 000000004747fff0  2d 7a 65 72 6f 00 72 65-61 64 2d 7a 65 72 6f 00 |-zero.read-zero.|
-  (read-zero) begin
-- (read-zero) open "sample.txt"
-- (read-zero) end
-- read-zero: exit(0)
+run: read() returned 9 instead of 0: FAILED

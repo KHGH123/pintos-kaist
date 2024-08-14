@@ -27,6 +27,7 @@
 /* List of processes in THREAD_READY state, that is, processes
    that are ready to run but not actually running. */
 static struct list ready_list;
+static struct list wait_list;
 
 /* Idle thread. */
 static struct thread *idle_thread;
@@ -128,7 +129,7 @@ thread_init (void) {
 	/* Init the globla thread context */
 	lock_init (&tid_lock);
 	list_init (&ready_list);
-	// list_init (get_blocked_list ());
+	list_init (&wait_list );
 	list_init (&destruction_req);
 
 	/* Set up a thread structure for the running thread. */
@@ -461,8 +462,6 @@ init_thread (struct thread *t, const char *name, int priority) {
 	t->waiting_thread = NULL;
 	sema_init (&t->sema, 0);
 	sema_init (&t->wait_sema, 0);
-	list_init (&t->child_thread);
-	list_init (&t->waitqueue);
 
 	t->magic = THREAD_MAGIC;
 }
@@ -652,15 +651,14 @@ allocate_tid (void) {
 	return tid;
 }
 
-struct thread* find_thread_with_tid(int tid){
-	struct list_elem *e = list_begin(&ready_list);
-    while (e != list_end(&ready_list)) {
-		struct thread* temporary = list_entry(e, struct thread, elem);
-		if(temporary->tid == tid){
-			return temporary;
-		}
-		e = list_next(e);
-	}
+struct thread *
+find_thread (tid_t tid){
+	struct list_elem *e;
+	for (e = list_begin (&ready_list); e != list_end (&ready_list); e = list_next (e))
+		if (list_entry (e, struct thread, elem)->tid == tid) 
+			return list_entry (e, struct thread, elem);
+	
+	return NULL;
 }
 
 

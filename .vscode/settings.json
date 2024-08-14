@@ -13,6 +13,8 @@
         "iosfwd": "c",
         "new": "c",
         "ostream": "c",
-        "streambuf": "c"
+        "streambuf": "c",
+        "thread": "c",
+        "lib.h": "c"
     }
 }

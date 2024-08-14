@@ -21,18 +21,25 @@ Formatting file system...done.
 Boot complete.
 Putting 'open-bad-ptr' into the file system...
 Executing 'open-bad-ptr':
-000000004747ffc0  00 00 00 00 00 00 00 00-e6 ff 47 47 00 00 00 00 |..........GG....|
-000000004747ffd0  f3 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-000000004747ffe0  00 00 00 00 00 00 6f 70-65 6e 2d 62 61 64 2d 70 |......open-bad-p|
-000000004747fff0  74 72 00 6f 70 65 6e 2d-62 61 64 2d 70 74 72 00 |tr.open-bad-ptr.|
 (open-bad-ptr) begin
-Execution of 'open-bad-ptr' complete.
-Timer: 260 ticks
-Thread: 32 idle ticks, 227 kernel ticks, 1 user ticks
+Page fault at 0x20101234: not present error reading page in kernel context.
+Interrupt 0x0e (#PF Page-Fault Exception) at rip=80042173b2
+ cr2=0000000020101234 error=               0
+rax 0000000020101234 rbx 0000008004240000 rcx 000000000000003f rdx 0000008004240e38
+rsp 0000008004240de0 rbp 0000008004240e00 rsi 0000008004240e38 rdi 0000000020101234
+rip 00000080042173b2 r8 0000000000000000  r9 0000000000000000 r10 0000000000000000
+r11 0000000000000212 r12 000000800421d4e7 r13 0000000000000000 r14 0000000000000000
+r15 0000000000000000 rflags 00000202
+es: 001b ds: 001b cs: 0008 ss: 0010
+Kernel PANIC at ../../userprog/exception.c:97 in kill(): Kernel bug - unexpected interrupt in kernel
+Call stack: 0x80042180de 0x800421cd46 0x800421cec5 0x8004208bcb 0x8004208fe8 0x800421f0b9 0x800421f1f3 0x800421db73 0x800421d16e 0x800421d60e 0x800421cf3a 0x401015 0x4010a8 0x401b3c.
+The `backtrace' program can make call stacks useful.
+Read "Backtraces" in the "Debugging Tools" chapter
+of the Pintos documentation for more information.
+Timer: 61 ticks
+Thread: 32 idle ticks, 26 kernel ticks, 3 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 83 reads, 274 writes
+hd0:1: 85 reads, 274 writes
 hd1:0: 123 reads, 0 writes
-Console: 1217 characters output
-Keyboard: 0 keys pressed
-Exception: 0 page faults
-Powering off...
+Console: 1864 characters output
+Key

@@ -1,29 +1,17 @@
 FAIL
-Test output failed to match any acceptable form.
-
-Acceptable output:
-  (write-bad-ptr) begin
-  (write-bad-ptr) open "sample.txt"
-  write-bad-ptr: exit(-1)
-Differences in `diff -u' format:
-+ 000000004747ffc0  00 00 00 00 00 00 00 00-e4 ff 47 47 00 00 00 00 |..........GG....|
-+ 000000004747ffd0  f2 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-+ 000000004747ffe0  00 00 00 00 77 72 69 74-65 2d 62 61 64 2d 70 74 |....write-bad-pt|
-+ 000000004747fff0  72 00 77 72 69 74 65 2d-62 61 64 2d 70 74 72 00 |r.write-bad-ptr.|
-  (write-bad-ptr) begin
-- (write-bad-ptr) open "sample.txt"
-- write-bad-ptr: exit(-1)
-Acceptable output:
-  (write-bad-ptr) begin
-  (write-bad-ptr) open "sample.txt"
-  (write-bad-ptr) end
-  write-bad-ptr: exit(0)
-Differences in `diff -u' format:
-+ 000000004747ffc0  00 00 00 00 00 00 00 00-e4 ff 47 47 00 00 00 00 |..........GG....|
-+ 000000004747ffd0  f2 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-+ 000000004747ffe0  00 00 00 00 77 72 69 74-65 2d 62 61 64 2d 70 74 |....write-bad-pt|
-+ 000000004747fff0  72 00 77 72 69 74 65 2d-62 61 64 2d 70 74 72 00 |r.write-bad-ptr.|
-  (write-bad-ptr) begin
-- (write-bad-ptr) open "sample.txt"
-- (write-bad-ptr) end
-- write-bad-ptr: exit(0)
+Kernel panic in run: PANIC at ../../userprog/exception.c:97 in kill(): Kernel bug - unexpected interrupt in kernel
+Call stack: 0x80042180de 0x800421cd46 0x800421cec5 0x8004208bcb 0x8004208fe8 0x800421fd96 0x800421ebc5 0x800421d368 0x800421d6a5 0x800421cf3a 0x401078 0x4010ee 0x401b82
+Translation of call stack:
+0x00000080042180de: debug_panic (lib/kernel/debug.c:32)
+0x000000800421cd46: kill (userprog/exception.c:103)
+0x000000800421cec5: page_fault (userprog/exception.c:159 (discriminator 12))
+0x0000008004208bcb: intr_handler (threads/interrupt.c:352)
+0x0000008004208fe8: intr_entry (intr-stubs.o:?)
+0x000000800421fd96: inode_write_at (filesys/inode.c:277)
+0x000000800421ebc5: file_write (filesys/file.c:98)
+0x000000800421d368: write (userprog/syscall.c:122)
+0x000000800421d6a5: syscall_handler (userprog/syscall.c:200)
+0x000000800421cf3a: no_sti (syscall-entry.o:?)
+0x0000000000401078: (unknown)
+0x00000000004010ee: (unknown)
+0x0000000000401b82: (unknown)

@@ -108,12 +108,8 @@ struct thread {
 	struct file *fd_table[64];
 	tid_t fork_value;
 
-	struct list child_thread;
-	struct list_elem child_elem;
-
-	struct list waitqueue;
-	struct list_elem wait_elem;
 	struct thread *waiting_thread;
+	int exit_status;
 	
 	struct semaphore sema;
 	struct semaphore wait_sema;
@@ -130,7 +126,7 @@ struct thread {
 	struct intr_frame tf;               /* Information for switching */
 	unsigned magic;                     /* Detects stack overflow. */
 
-	struct intr_frame *f;
+	struct intr_frame f;
 };
 
 /* If false (default), use round-robin scheduler.
@@ -172,5 +168,6 @@ int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 
 void do_iret (struct intr_frame *tf);
-struct thread* find_thread_with_tid(int tid);
+void add_wait_list (struct thread *);
+struct thread* find_thread(tid_t);
 #endif /* threads/thread.h */

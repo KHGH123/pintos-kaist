@@ -22,18 +22,16 @@ Boot complete.
 Putting 'open-normal' into the file system...
 Putting 'sample.txt' into the file system...
 Executing 'open-normal':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  e8 ff 47 47 00 00 00 00-f4 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-6f 70 65 6e 2d 6e 6f 72 |........open-nor|
-000000004747fff0  6d 61 6c 00 6f 70 65 6e-2d 6e 6f 72 6d 61 6c 00 |mal.open-normal.|
 (open-normal) begin
+(open-normal) end
+open-normal: exit(0)
 Execution of 'open-normal' complete.
-Timer: 260 ticks
-Thread: 32 idle ticks, 227 kernel ticks, 1 user ticks
+Timer: 61 ticks
+Thread: 31 idle ticks, 29 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 110 reads, 288 writes
+hd0:1: 114 reads, 288 writes
 hd1:0: 125 reads, 0 writes
-Console: 1272 characters output
+Console: 969 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

@@ -75,6 +75,7 @@ process_init (void) {
 tid_t
 process_create_initd (const char *file_name) {
 	char *fn_copy;
+	char *fname, *save_ptr;
 	tid_t tid;
 	/* Make a copy of FILE_NAME.
 	 * Otherwise there's a race between the caller and load(). */
@@ -84,8 +85,9 @@ process_create_initd (const char *file_name) {
 		return TID_ERROR;
 	strlcpy (fn_copy, file_name, PGSIZE);
 
+	fname = strtok_r (file_name, " ", &save_ptr);
 	/* Create a new thread to execute FILE_NAME. */
-	tid = thread_create (file_name, PRI_DEFAULT, initd, fn_copy);
+	tid = thread_create (fname, PRI_DEFAULT, initd, fn_copy);
 	if (tid == TID_ERROR)
 		palloc_free_page (fn_copy);
 	return tid;
@@ -109,8 +111,17 @@ initd (void *f_name) {
 tid_t
 process_fork (const char *name, struct intr_frame *if_ UNUSED) {
 	/* Clone current thread to new thread.*/
-	return thread_create (name,
-			PRI_DEFAULT, __do_fork, thread_current ());
+	struct thread *child = NULL;
+	struct list_elem *e;
+	tid_t ttid;
+
+	memcpy(&thread_current ()->f, if_, sizeof (struct intr_frame));
+	ttid = thread_create (name, PRI_DEFAULT, __do_fork, thread_current ());
+	
+	if (ttid == TID_ERROR) return TID_ERROR;
+	
+	sema_down (&thread_current ()->sema);
+	return ttid;
 }
 
 #ifndef VM
@@ -125,21 +136,24 @@ duplicate_pte (uint64_t *pte, void *va, void *aux) {
 	bool writable;
 
 	/* 1. TODO: If the parent_page is kernel page, then return immediately. */
-
+	if (is_kernel_vaddr(va)) 
+		return true;
 	/* 2. Resolve VA from the parent's page map level 4. */
 	parent_page = pml4_get_page (parent->pml4, va);
 
 	/* 3. TODO: Allocate new PAL_USER page for the child and set result to
 	 *    TODO: NEWPAGE. */
-
+	newpage = palloc_get_page (PAL_USER);
 	/* 4. TODO: Duplicate parent's page to the new page and
 	 *    TODO: check whether parent's page is writable or not (set WRITABLE
 	 *    TODO: according to the result). */
-
+	memcpy (newpage, parent_page, PGSIZE);
+	writable = is_writable(pte);
 	/* 5. Add new page to child's page table at address VA with WRITABLE
 	 *    permission. */
 	if (!pml4_set_page (current->pml4, va, newpage, writable)) {
 		/* 6. TODO: if fail to insert page, do error handling. */
+		return false;
 	}
 	return true;
 }
@@ -155,11 +169,13 @@ __do_fork (void *aux) {
 	struct thread *parent = (struct thread *) aux;
 	struct thread *current = thread_current ();
 	/* TODO: somehow pass the parent_if. (i.e. process_fork()'s if_) */
-	struct intr_frame *parent_if;
+	struct intr_frame *parent_if = &parent->f;
 	bool succ = true;
 
+	current->waiting_thread = parent;
 	/* 1. Read the cpu context to local stack. */
 	memcpy (&if_, parent_if, sizeof (struct intr_frame));
+	if_.R.rax = 0;
 
 	/* 2. Duplicate PT */
 	current->pml4 = pml4_create();
@@ -170,25 +186,33 @@ __do_fork (void *aux) {
 #ifdef VM
 	supplemental_page_table_init (&current->spt);
 	if (!supplemental_page_table_copy (&current->spt, &parent->spt))
-		goto error;
+	goto error;
 #else
 	if (!pml4_for_each (parent->pml4, duplicate_pte, parent))
 		goto error;
+		
 #endif
-
+ 
 	/* TODO: Your code goes here.
-	 * TODO: Hint) To duplicate the file object, use `file_duplicate`
-	 * TODO:       in include/filesys/file.h. Note that parent should not return
-	 * TODO:       from the fork() until this function successfully duplicates
-	 * TODO:       the resources of parent.*/
+	* TODO: Hint) To duplicate the file object, use `file_duplicate`
+	* TODO:       in include/filesys/file.h. Note that parent should not return
+	* TODO:       from the fork() until this function successfully duplicates
+	* TODO:       the resources of parent.*/
+	for (int i = 0; i < 64; i++) 
+		if (parent->fd_table[i])
+			current->fd_table[i] = file_duplicate (parent->fd_table[i]);
 
+	sema_up (&parent->sema);
 	process_init ();
 
 	/* Finally, switch to the newly created process. */
 	if (succ)
 		do_iret (&if_);
-error:
-	thread_exit ();
+
+
+	error:
+		sema_up (&parent->sema);
+		thread_exit ();
 }
 
 /* Switch the current execution context to the f_name.
@@ -239,34 +263,37 @@ process_wait (tid_t child_tid UNUSED) {
 	/* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
-	// while (1) {}
-	struct thread* temp_thread = find_thread_with_tid(child_tid);
-
-	while(1){
-		if(temp_thread->status == THREAD_DYING){
-			int temp_return = thread_current()->tf.R.rax;
-			return temp_return;
-		}
+	struct thread* t = find_thread (child_tid);
+	if (t) {
+		t->waiting_thread = thread_current ();
+		sema_down (&thread_current ()->wait_sema);
 	}
-
-	return -1;
+	
+	return thread_current ()->exit_status;
 }
 
 /* Exit the process. This function is called by thread_exit (). */
 void
 process_exit (void) {
 	struct thread *curr = thread_current ();
+	// printf("%s exit\n", curr->name);
 	/* TODO: Your code goes here.
 	 * TODO: Implement process termination message (see
 	 * TODO: project2/process_termination.html).
 	 * TODO: We recommend you to implement process resource cleanup here. */
 	for (int i = 0; i < 64; i++) { 
 		if (curr->fd_table[i]) {
-			file_close (curr->fd_table);
+			file_close (curr->fd_table[i]);
 			curr->fd_table[i] = NULL;
 		}
 	}
+	if (curr->waiting_thread) {
+		curr->waiting_thread->exit_status = curr->exit_status;
+		sema_up (&curr->waiting_thread->wait_sema);
+	}
+	printf("%s: exit(%d)\n", curr->name, curr->exit_status);
 	process_cleanup ();
+	
 }
 
 /* Free the current process's resources. */
@@ -388,7 +415,7 @@ load (const char *file_name, struct intr_frame *if_) {
 	process_activate (thread_current ());
 
 	/* Open executable file. */
-	for (int i = 0; file_name[i] != ' ' && file_name[i] != '\0'; i++) {
+	for (i = 0; file_name[i] != ' ' && file_name[i] != '\0'; i++) {
 		fname[i] = file_name[i];
 	}
 	fname[i] = '\0';
@@ -476,7 +503,7 @@ load (const char *file_name, struct intr_frame *if_) {
 	 * TODO: Implement argument passing (see project2/argument_passing.html). */
 	argument_passing (file_name, if_);
 
-	hex_dump(if_->rsp, if_->rsp, USER_STACK - (uint64_t)if_->rsp, true);
+	// hex_dump(if_->rsp, if_->rsp, USER_STACK - (uint64_t)if_->rsp, true);
 
 	success = true;
 

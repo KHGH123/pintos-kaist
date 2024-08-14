@@ -21,33 +21,41 @@ Formatting file system...done.
 Boot complete.
 Putting 'args-many' into the file system...
 Executing 'args-many a b c d e f g h i j k l m n o p q r s t u v':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  ec ff 47 47 00 00 00 00-f6 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-00 00 00 00 61 72 67 73 |............args|
-000000004747fff0  2d 6d 61 6e 79 00 61 72-67 73 2d 6d 61 6e 79 00 |-many.args-many.|
 (args) begin
-(args) argc = 2
+(args) argc = 23
 (args) argv[0] = 'args-many'
-(args) argv[1] = 'args-many'
-(args) argv[2] = null
+(args) argv[1] = 'a'
+(args) argv[2] = 'b'
+(args) argv[3] = 'c'
+(args) argv[4] = 'd'
+(args) argv[5] = 'e'
+(args) argv[6] = 'f'
+(args) argv[7] = 'g'
+(args) argv[8] = 'h'
+(args) argv[9] = 'i'
+(args) argv[10] = 'j'
+(args) argv[11] = 'k'
+(args) argv[12] = 'l'
+(args) argv[13] = 'm'
+(args) argv[14] = 'n'
+(args) argv[15] = 'o'
+(args) argv[16] = 'p'
+(args) argv[17] = 'q'
+(args) argv[18] = 'r'
+(args) argv[19] = 's'
+(args) argv[20] = 't'
+(args) argv[21] = 'u'
+(args) argv[22] = 'v'
+(args) argv[23] = null
 (args) end
-Page fault at 0x4041f9: not present error reading page in user context.
-args-many a b c: dying due to interrupt 0x0e (#PF Page-Fault Exception).
-Interrupt 0x0e (#PF Page-Fault Exception) at rip=4041f9
- cr2=00000000004041f9 error=               4
-rax 0000000000000001 rbx 0000000000000000 rcx 00000000004041f9 rdx 0000000000000000
-rsp 000000004747ff50 rbp 000000004747ffa0 rsi 0000000000000000 rdi 0000000000000000
-rip 00000000004041f9 r8 0000000000000000  r9 0000000000000000 r10 0000000000000000
-r11 0000000000000206 r12 0000000000000000 r13 0000000000000000 r14 0000000000000000
-r15 0000000000000000 rflags 00000206
-es: 001b ds: 001b cs: 0023 ss: 001b
-Execution of 'args-many a b c d e f g h i j k l m n o p q r s t u v' complete.
-Timer: 267 ticks
-Thread: 32 idle ticks, 233 kernel ticks, 2 user ticks
+args-many: exit(0)
+Execution of 'args-many' complete.
+Timer: 64 ticks
+Thread: 31 idle ticks, 28 kernel ticks, 5 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 83 reads, 272 writes
 hd1:0: 122 reads, 0 writes
-Console: 2089 characters output
+Console: 1516 characters output
 Keyboard: 0 keys pressed
-Exception: 1 page faults
+Exception: 0 page faults
 Powering off...

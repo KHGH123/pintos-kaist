@@ -46,6 +46,7 @@ void halt (void) {
 }
 
 void exit (int status) {
+	thread_current ()->exit_status = status;
 	thread_exit ();
 }
 
@@ -58,18 +59,21 @@ int exec (const char *cmd_line) {
 }
 
 int wait (tid_t pid) {
-	process_wait (pid);
+	return process_wait (pid);
 }
 
 bool create (const char *file, unsigned int initial_size) {
+	if (!file) return false;
 	return filesys_create (file, initial_size);
 }
 
 bool remove (const char *file) {
+	if (!file) return false;
 	return filesys_remove (file);
 }
 
 int open (const char *file) {
+	if (!file) return -1;
 	int idx = 0;
 	while (thread_current ()->fd_table[idx] && idx < 64)
 		idx++;
@@ -83,7 +87,7 @@ int open (const char *file) {
 }
 
 int filesize (int fd) {
-	if (fd == STDIN_FILENO || fd == STDOUT_FILENO) return;
+	if (fd == STDIN_FILENO || fd == STDOUT_FILENO) return 0;
 	return file_length (thread_current ()->fd_table[fd - 2]);
 }
 
@@ -155,6 +159,7 @@ syscall_handler (struct intr_frame *f UNUSED) {
 	
 	case SYS_EXIT:
 		exit (f->R.rdi);
+		f->R.rax = f->R.rdi;
 		break;
 	
 	case SYS_FORK:
@@ -166,6 +171,7 @@ syscall_handler (struct intr_frame *f UNUSED) {
 		break;
 	
 	case SYS_WAIT:
+		f->R.rax = wait (f->R.rdi);
 		break;
 
 	case SYS_CREATE: 

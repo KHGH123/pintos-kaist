@@ -22,18 +22,18 @@ Boot complete.
 Putting 'write-normal' into the file system...
 Putting 'sample.txt' into the file system...
 Executing 'write-normal':
-000000004747ffc0  00 00 00 00 00 00 00 00-e6 ff 47 47 00 00 00 00 |..........GG....|
-000000004747ffd0  f3 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-000000004747ffe0  00 00 00 00 00 00 77 72-69 74 65 2d 6e 6f 72 6d |......write-norm|
-000000004747fff0  61 6c 00 77 72 69 74 65-2d 6e 6f 72 6d 61 6c 00 |al.write-normal.|
 (write-normal) begin
+(write-normal) create "test.txt"
+(write-normal) open "test.txt"
+(write-normal) end
+write-normal: exit(0)
 Execution of 'write-normal' complete.
-Timer: 264 ticks
-Thread: 32 idle ticks, 231 kernel ticks, 1 user ticks
+Timer: 63 ticks
+Thread: 32 idle ticks, 28 kernel ticks, 3 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 111 reads, 298 writes
+hd0:1: 140 reads, 312 writes
 hd1:0: 130 reads, 0 writes
-Console: 1278 characters output
+Console: 1041 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

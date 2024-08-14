@@ -22,18 +22,17 @@ Boot complete.
 Putting 'open-boundary' into the file system...
 Putting 'sample.txt' into the file system...
 Executing 'open-boundary':
-000000004747ffc0  00 00 00 00 00 00 00 00-e4 ff 47 47 00 00 00 00 |..........GG....|
-000000004747ffd0  f2 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-000000004747ffe0  00 00 00 00 6f 70 65 6e-2d 62 6f 75 6e 64 61 72 |....open-boundar|
-000000004747fff0  79 00 6f 70 65 6e 2d 62-6f 75 6e 64 61 72 79 00 |y.open-boundary.|
 (open-boundary) begin
+(open-boundary) open "sample.txt"
+(open-boundary) end
+open-boundary: exit(0)
 Execution of 'open-boundary' complete.
-Timer: 260 ticks
-Thread: 33 idle ticks, 226 kernel ticks, 1 user ticks
+Timer: 62 ticks
+Thread: 33 idle ticks, 27 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 110 reads, 292 writes
+hd0:1: 114 reads, 292 writes
 hd1:0: 127 reads, 0 writes
-Console: 1284 characters output
+Console: 1019 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

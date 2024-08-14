@@ -22,18 +22,19 @@ Boot complete.
 Putting 'close-twice' into the file system...
 Putting 'sample.txt' into the file system...
 Executing 'close-twice':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  e8 ff 47 47 00 00 00 00-f4 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-63 6c 6f 73 65 2d 74 77 |........close-tw|
-000000004747fff0  69 63 65 00 63 6c 6f 73-65 2d 74 77 69 63 65 00 |ice.close-twice.|
 (close-twice) begin
+(close-twice) open "sample.txt"
+(close-twice) close "sample.txt"
+(close-twice) close "sample.txt" again
+(close-twice) end
+close-twice: exit(0)
 Execution of 'close-twice' complete.
-Timer: 260 ticks
-Thread: 30 idle ticks, 229 kernel ticks, 1 user ticks
+Timer: 62 ticks
+Thread: 35 idle ticks, 25 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 110 reads, 288 writes
+hd0:1: 114 reads, 288 writes
 hd1:0: 125 reads, 0 writes
-Console: 1272 characters output
+Console: 1073 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

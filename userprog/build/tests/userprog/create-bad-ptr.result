@@ -1,13 +1,16 @@
 FAIL
-Test output failed to match any acceptable form.
-
-Acceptable output:
-  (create-bad-ptr) begin
-  create-bad-ptr: exit(-1)
-Differences in `diff -u' format:
-+ 000000004747ffc0  00 00 00 00 00 00 00 00-e2 ff 47 47 00 00 00 00 |..........GG....|
-+ 000000004747ffd0  f1 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-+ 000000004747ffe0  00 00 63 72 65 61 74 65-2d 62 61 64 2d 70 74 72 |..create-bad-ptr|
-+ 000000004747fff0  00 63 72 65 61 74 65 2d-62 61 64 2d 70 74 72 00 |.create-bad-ptr.|
-  (create-bad-ptr) begin
-- create-bad-ptr: exit(-1)
+Kernel panic in run: PANIC at ../../userprog/exception.c:97 in kill(): Kernel bug - unexpected interrupt in kernel
+Call stack: 0x80042180de 0x800421cd6e 0x800421ceed 0x8004208bcb 0x8004208fe8 0x800421dafa 0x800421d0f3 0x800421d5e8 0x800421cf62 0x40101a 0x401098 0x401b2c
+Translation of call stack:
+0x00000080042180de: debug_panic (lib/kernel/debug.c:32)
+0x000000800421cd6e: kill (userprog/exception.c:103)
+0x000000800421ceed: page_fault (userprog/exception.c:159 (discriminator 12))
+0x0000008004208bcb: intr_handler (threads/interrupt.c:352)
+0x0000008004208fe8: intr_entry (intr-stubs.o:?)
+0x000000800421dafa: filesys_create (filesys/filesys.c:67 (discriminator 3))
+0x000000800421d0f3: create (userprog/syscall.c:70)
+0x000000800421d5e8: syscall_handler (userprog/syscall.c:180)
+0x000000800421cf62: no_sti (syscall-entry.o:?)
+0x000000000040101a: (unknown)
+0x0000000000401098: (unknown)
+0x0000000000401b2c: (unknown)

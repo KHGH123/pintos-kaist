@@ -21,18 +21,16 @@ Formatting file system...done.
 Boot complete.
 Putting 'open-empty' into the file system...
 Executing 'open-empty':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  ea ff 47 47 00 00 00 00-f5 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-00 00 6f 70 65 6e 2d 65 |..........open-e|
-000000004747fff0  6d 70 74 79 00 6f 70 65-6e 2d 65 6d 70 74 79 00 |mpty.open-empty.|
 (open-empty) begin
+(open-empty) end
+open-empty: exit(0)
 Execution of 'open-empty' complete.
-Timer: 260 ticks
-Thread: 33 idle ticks, 226 kernel ticks, 1 user ticks
+Timer: 61 ticks
+Thread: 33 idle ticks, 26 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 83 reads, 274 writes
+hd0:1: 100 reads, 274 writes
 hd1:0: 123 reads, 0 writes
-Console: 1205 characters output
+Console: 901 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

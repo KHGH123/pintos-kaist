@@ -21,18 +21,16 @@ Formatting file system...done.
 Boot complete.
 Putting 'open-null' into the file system...
 Executing 'open-null':
-000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
-000000004747ffd0  ec ff 47 47 00 00 00 00-f6 ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffe0  00 00 00 00 00 00 00 00-00 00 00 00 6f 70 65 6e |............open|
-000000004747fff0  2d 6e 75 6c 6c 00 6f 70-65 6e 2d 6e 75 6c 6c 00 |-null.open-null.|
 (open-null) begin
+(open-null) end
+open-null: exit(0)
 Execution of 'open-null' complete.
-Timer: 256 ticks
-Thread: 31 idle ticks, 224 kernel ticks, 1 user ticks
+Timer: 61 ticks
+Thread: 32 idle ticks, 28 kernel ticks, 1 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 82 reads, 272 writes
 hd1:0: 122 reads, 0 writes
-Console: 1199 characters output
+Console: 892 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

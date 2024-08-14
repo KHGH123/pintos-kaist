@@ -1,17 +1,1 @@
-FAIL
-Test output failed to match any acceptable form.
-
-Acceptable output:
-  (create-normal) begin
-  (create-normal) create quux.dat
-  (create-normal) end
-  create-normal: exit(0)
-Differences in `diff -u' format:
-+ 000000004747ffc0  00 00 00 00 00 00 00 00-e4 ff 47 47 00 00 00 00 |..........GG....|
-+ 000000004747ffd0  f2 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
-+ 000000004747ffe0  00 00 00 00 63 72 65 61-74 65 2d 6e 6f 72 6d 61 |....create-norma|
-+ 000000004747fff0  6c 00 63 72 65 61 74 65-2d 6e 6f 72 6d 61 6c 00 |l.create-normal.|
-  (create-normal) begin
-- (create-normal) create quux.dat
-- (create-normal) end
-- create-normal: exit(0)
+PASS
