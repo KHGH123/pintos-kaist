@@ -239,7 +239,16 @@ process_wait (tid_t child_tid UNUSED) {
 	/* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
-	while (1) {}
+	// while (1) {}
+	struct thread* temp_thread = find_thread_with_tid(child_tid);
+
+	while(1){
+		if(temp_thread->status == THREAD_DYING){
+			int temp_return = thread_current()->tf.R.rax;
+			return temp_return;
+		}
+	}
+
 	return -1;
 }
 
@@ -251,7 +260,12 @@ process_exit (void) {
 	 * TODO: Implement process termination message (see
 	 * TODO: project2/process_termination.html).
 	 * TODO: We recommend you to implement process resource cleanup here. */
-
+	for (int i = 0; i < 64; i++) { 
+		if (curr->fd_table[i]) {
+			file_close (curr->fd_table);
+			curr->fd_table[i] = NULL;
+		}
+	}
 	process_cleanup ();
 }
 
@@ -374,7 +388,7 @@ load (const char *file_name, struct intr_frame *if_) {
 	process_activate (thread_current ());
 
 	/* Open executable file. */
-	for (int i = 0; file_name[i] != ' '; i++) {
+	for (int i = 0; file_name[i] != ' ' && file_name[i] != '\0'; i++) {
 		fname[i] = file_name[i];
 	}
 	fname[i] = '\0';

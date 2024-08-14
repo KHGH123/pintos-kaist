@@ -5,6 +5,7 @@
 #include <list.h>
 #include <stdint.h>
 #include "threads/interrupt.h"
+#include "threads/synch.h"
 #ifdef VM
 #include "vm/vm.h"
 #endif
@@ -104,6 +105,18 @@ struct thread {
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */
 
+	struct file *fd_table[64];
+	tid_t fork_value;
+
+	struct list child_thread;
+	struct list_elem child_elem;
+
+	struct list waitqueue;
+	struct list_elem wait_elem;
+	struct thread *waiting_thread;
+	
+	struct semaphore sema;
+	struct semaphore wait_sema;
 #ifdef USERPROG
 	/* Owned by userprog/process.c. */
 	uint64_t *pml4;                     /* Page map level 4 */
@@ -116,6 +129,8 @@ struct thread {
 	/* Owned by thread.c. */
 	struct intr_frame tf;               /* Information for switching */
 	unsigned magic;                     /* Detects stack overflow. */
+
+	struct intr_frame *f;
 };
 
 /* If false (default), use round-robin scheduler.
@@ -157,5 +172,5 @@ int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 
 void do_iret (struct intr_frame *tf);
-
+struct thread* find_thread_with_tid(int tid);
 #endif /* threads/thread.h */

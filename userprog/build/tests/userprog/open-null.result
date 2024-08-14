@@ -1,0 +1,25 @@
+FAIL
+Test output failed to match any acceptable form.
+
+Acceptable output:
+  (open-null) begin
+  (open-null) end
+  open-null: exit(0)
+Differences in `diff -u' format:
++ 000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
++ 000000004747ffd0  ec ff 47 47 00 00 00 00-f6 ff 47 47 00 00 00 00 |..GG......GG....|
++ 000000004747ffe0  00 00 00 00 00 00 00 00-00 00 00 00 6f 70 65 6e |............open|
++ 000000004747fff0  2d 6e 75 6c 6c 00 6f 70-65 6e 2d 6e 75 6c 6c 00 |-null.open-null.|
+  (open-null) begin
+- (open-null) end
+- open-null: exit(0)
+Acceptable output:
+  (open-null) begin
+  open-null: exit(-1)
+Differences in `diff -u' format:
++ 000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
++ 000000004747ffd0  ec ff 47 47 00 00 00 00-f6 ff 47 47 00 00 00 00 |..GG......GG....|
++ 000000004747ffe0  00 00 00 00 00 00 00 00-00 00 00 00 6f 70 65 6e |............open|
++ 000000004747fff0  2d 6e 75 6c 6c 00 6f 70-65 6e 2d 6e 75 6c 6c 00 |-null.open-null.|
+  (open-null) begin
+- open-null: exit(-1)

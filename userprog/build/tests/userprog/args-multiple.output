@@ -13,7 +13,7 @@ Pintos booting with:
 	ext_mem: 0x100000 ~ 0x13e0000 (Usable: 19,328 kB)
 Calibrating timer...  157,081,600 loops/s.
 hd0: unexpected interrupt
-hd0:0: detected 313 sector (156 kB) disk, model "QEMU HARDDISK", serial "QM00001"
+hd0:0: detected 321 sector (160 kB) disk, model "QEMU HARDDISK", serial "QM00001"
 hd0:1: detected 20,160 sector (9 MB) disk, model "QEMU HARDDISK", serial "QM00002"
 hd1: unexpected interrupt
 hd1:0: detected 122 sector (61 kB) disk, model "QEMU HARDDISK", serial "QM00003"
@@ -21,11 +21,33 @@ Formatting file system...done.
 Boot complete.
 Putting 'args-multiple' into the file system...
 Executing 'args-multiple some arguments for you!':
-000000004747ffa0  00 00 00 00 00 00 00 00-da ff 47 47 00 00 00 00 |..........GG....|
-000000004747ffb0  e8 ff 47 47 00 00 00 00-ed ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffc0  f7 ff 47 47 00 00 00 00-fb ff 47 47 00 00 00 00 |..GG......GG....|
-000000004747ffd0  00 00 00 00 00 00 00 00-00 00 61 72 67 73 2d 6d |..........args-m|
-000000004747ffe0  75 6c 74 69 70 6c 65 00-73 6f 6d 65 00 61 72 67 |ultiple.some.arg|
-000000004747fff0  75 6d 65 6e 74 73 00 66-6f 72 00 79 6f 75 21 00 |uments.for.you!.|
-system call!
-TIMEOUT
+000000004747ffc0  00 00 00 00 00 00 00 00-e4 ff 47 47 00 00 00 00 |..........GG....|
+000000004747ffd0  f2 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
+000000004747ffe0  00 00 00 00 61 72 67 73-2d 6d 75 6c 74 69 70 6c |....args-multipl|
+000000004747fff0  65 00 61 72 67 73 2d 6d-75 6c 74 69 70 6c 65 00 |e.args-multiple.|
+(args) begin
+(args) argc = 2
+(args) argv[0] = 'args-multiple'
+(args) argv[1] = 'args-multiple'
+(args) argv[2] = null
+(args) end
+Page fault at 0x4041f9: not present error reading page in user context.
+args-multiple s: dying due to interrupt 0x0e (#PF Page-Fault Exception).
+Interrupt 0x0e (#PF Page-Fault Exception) at rip=4041f9
+ cr2=00000000004041f9 error=               4
+rax 0000000000000001 rbx 0000000000000000 rcx 00000000004041f9 rdx 0000000000000000
+rsp 000000004747ff48 rbp 000000004747ff98 rsi 0000000000000000 rdi 0000000000000000
+rip 00000000004041f9 r8 0000000000000000  r9 0000000000000000 r10 0000000000000000
+r11 0000000000000206 r12 0000000000000000 r13 0000000000000000 r14 0000000000000000
+r15 0000000000000000 rflags 00000206
+es: 001b ds: 001b cs: 0023 ss: 001b
+Execution of 'args-multiple some arguments for you!' complete.
+Timer: 267 ticks
+Thread: 32 idle ticks, 233 kernel ticks, 2 user ticks
+hd0:0: 0 reads, 0 writes
+hd0:1: 83 reads, 272 writes
+hd1:0: 122 reads, 0 writes
+Console: 2057 characters output
+Keyboard: 0 keys pressed
+Exception: 1 page faults
+Powering off...

@@ -457,6 +457,13 @@ init_thread (struct thread *t, const char *name, int priority) {
 	t->priority = priority;
 	t->prio_orig = priority;
 	t->failed_lock = NULL;
+	t->fork_value = 0;
+	t->waiting_thread = NULL;
+	sema_init (&t->sema, 0);
+	sema_init (&t->wait_sema, 0);
+	list_init (&t->child_thread);
+	list_init (&t->waitqueue);
+
 	t->magic = THREAD_MAGIC;
 }
 
@@ -609,6 +616,7 @@ schedule (void) {
 
 #ifdef USERPROG
 	/* Activate the new address space. */
+	// printf("%s-------\n", next->name);
 	process_activate (next);
 #endif
 
@@ -643,3 +651,16 @@ allocate_tid (void) {
 
 	return tid;
 }
+
+struct thread* find_thread_with_tid(int tid){
+	struct list_elem *e = list_begin(&ready_list);
+    while (e != list_end(&ready_list)) {
+		struct thread* temporary = list_entry(e, struct thread, elem);
+		if(temporary->tid == tid){
+			return temporary;
+		}
+		e = list_next(e);
+	}
+}
+
+

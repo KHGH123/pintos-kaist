@@ -1,0 +1,15 @@
+FAIL
+Test output failed to match any acceptable form.
+
+Acceptable output:
+  (open-missing) begin
+  (open-missing) end
+  open-missing: exit(0)
+Differences in `diff -u' format:
++ 000000004747ffc0  00 00 00 00 00 00 00 00-e6 ff 47 47 00 00 00 00 |..........GG....|
++ 000000004747ffd0  f3 ff 47 47 00 00 00 00-00 00 00 00 00 00 00 00 |..GG............|
++ 000000004747ffe0  00 00 00 00 00 00 6f 70-65 6e 2d 6d 69 73 73 69 |......open-missi|
++ 000000004747fff0  6e 67 00 6f 70 65 6e 2d-6d 69 73 73 69 6e 67 00 |ng.open-missing.|
+  (open-missing) begin
+- (open-missing) end
+- open-missing: exit(0)

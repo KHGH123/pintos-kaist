@@ -1,0 +1,15 @@
+FAIL
+Test output failed to match any acceptable form.
+
+Acceptable output:
+  (open-empty) begin
+  (open-empty) end
+  open-empty: exit(0)
+Differences in `diff -u' format:
++ 000000004747ffc0                          00 00 00 00 00 00 00 00 |        ........|
++ 000000004747ffd0  ea ff 47 47 00 00 00 00-f5 ff 47 47 00 00 00 00 |..GG......GG....|
++ 000000004747ffe0  00 00 00 00 00 00 00 00-00 00 6f 70 65 6e 2d 65 |..........open-e|
++ 000000004747fff0  6d 70 74 79 00 6f 70 65-6e 2d 65 6d 70 74 79 00 |mpty.open-empty.|
+  (open-empty) begin
+- (open-empty) end
+- open-empty: exit(0)
