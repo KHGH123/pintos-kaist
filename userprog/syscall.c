@@ -10,6 +10,7 @@
 #include "filesys/file.h"
 #include "filesys/filesys.h"
 #include "userprog/process.h"
+#include "threads/synch.h"
 
 
 void syscall_entry (void);
@@ -28,25 +29,17 @@ void syscall (struct intr_frame *);
 #define MSR_LSTAR 0xc0000082        /* Long mode SYSCALL target */
 #define MSR_SYSCALL_MASK 0xc0000084 /* Mask for the eflags */
 
-void check_address(void *addr) {
-	struct thread *t = thread_current();
-	/* --- Project 2: User memory access --- */
-	// if (!is_user_vaddr(addr)||addr == NULL) 
-	//-> 이 경우는 유저 주소 영역 내에서도 할당되지 않는 공간 가리키는 것을 체크하지 않음. 그래서 
-	// pml4_get_page를 추가해줘야!
-	if (!is_user_vaddr(addr)||addr == NULL||
-	pml4_get_page(t->pml4, addr)== NULL)
-	{
-		exit(-1);
-	}
+bool badptr (void *ptr) {
+	if (!ptr || is_kernel_vaddr (ptr) || !pml4_get_page (thread_current ()->pml4, ptr))
+		exit (-1);
 }
-
 void halt (void) {
 	power_off ();
 }
 
 void exit (int status) {
 	thread_current ()->exit_status = status;
+	printf("%s: exit(%d)\n", thread_current ()->name, status);
 	thread_exit ();
 }
 
@@ -55,6 +48,7 @@ tid_t fork (const char *thread_name, struct intr_frame *f) {
 }
 
 int exec (const char *cmd_line) {	
+	badptr (cmd_line);
 	if (process_exec (cmd_line) == -1) exit(-1);
 }
 
@@ -63,23 +57,23 @@ int wait (tid_t pid) {
 }
 
 bool create (const char *file, unsigned int initial_size) {
-	if (!file) return false;
+	badptr (file);
+	if (!file) exit (-1);
 	return filesys_create (file, initial_size);
 }
 
 bool remove (const char *file) {
-	if (!file) return false;
+	badptr (file);
 	return filesys_remove (file);
 }
 
 int open (const char *file) {
-	if (!file) return -1;
+	badptr (file);
 	int idx = 0;
 	while (thread_current ()->fd_table[idx] && idx < 64)
 		idx++;
 
 	thread_current ()->fd_table[idx] = filesys_open (file);
-	
 	if (!thread_current ()->fd_table[idx]) 
 		return -1;
 	else
@@ -92,7 +86,10 @@ int filesize (int fd) {
 }
 
 int read (int fd, void *buffer, unsigned size) {
-	if (fd == STDIN_FILENO) {
+	badptr (buffer);
+	if (fd < 0 || fd > 63 ||fd == STDOUT_FILENO || !thread_current ()->fd_table[fd - 2])
+		return -1;
+	else if (fd == STDIN_FILENO) {
 		char *p = (char *)buffer;
 		char c;
 		while (c = input_getc () != '\n') {
@@ -102,19 +99,18 @@ int read (int fd, void *buffer, unsigned size) {
 		*p = '\0';
 		return (char *)buffer - p;
 	}
-	else if (fd == STDOUT_FILENO || !thread_current ()->fd_table[fd - 2])
-		return -1;
 	else
 		return file_read (thread_current ()->fd_table[fd - 2], buffer, size);
 }
 
 int write (int fd, const void *buffer, unsigned size) {
-	if (fd == STDOUT_FILENO) {
+	badptr (buffer);
+	if (fd < 0 || fd > 63 || fd == STDIN_FILENO || !thread_current ()->fd_table[fd - 2])
+		return -1;
+	else if (fd == STDOUT_FILENO) {
 		putbuf(buffer, size);
 		return size;
 	}
-	else if (fd == STDIN_FILENO || !thread_current ()->fd_table[fd - 2])
-		return -1;
 	else 
 		return file_write (thread_current ()->fd_table[fd - 2], buffer, size);
 }
@@ -130,7 +126,7 @@ unsigned tell (int fd) {
 }
 
 void close (int fd) {
-	if (fd == STDIN_FILENO || fd == STDOUT_FILENO) return;
+	if (fd < 0 || fd > 63 || fd == STDIN_FILENO || fd == STDOUT_FILENO) exit (-1);
 	thread_current ()->fd_table [fd - 2] = NULL;
 }
 
@@ -167,7 +163,7 @@ syscall_handler (struct intr_frame *f UNUSED) {
 		break;
 	
 	case SYS_EXEC:
-		
+		f->R.rax = exec (f->R.rdi);
 		break;
 	
 	case SYS_WAIT:
@@ -191,7 +187,7 @@ syscall_handler (struct intr_frame *f UNUSED) {
 		break;
 	
 	case SYS_READ:
-		read (f->R.rdi, f->R.rsi, f->R.rdx);
+		f->R.rax = read (f->R.rdi, f->R.rsi, f->R.rdx);
 		break;
 	
 	case SYS_WRITE:
@@ -211,9 +207,8 @@ syscall_handler (struct intr_frame *f UNUSED) {
 		break;
 	
 	default:
+		exit (-1);
 		break;
 	}
-	return;
-	// printf ("system call!\n");
-	thread_exit ();
+	return;	
 }

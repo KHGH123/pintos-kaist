@@ -25,17 +25,19 @@ Executing 'fork-read':
 (fork-read) begin
 (fork-read) open "sample.txt"
 (fork-read) child run
-(fork-read) read() returned 9 instead of 353: FAILED
-child: exit(1)
-(fork-read) read() returned 9 instead of 353: FAILED
-fork-read: exit(1)
+(fork-read) Child: pintos is funny!
+(fork-read) end
+child: exit(0)
+(fork-read) Parent success
+(fork-read) end
+fork-read: exit(0)
 Execution of 'fork-read' complete.
-Timer: 64 ticks
-Thread: 35 idle ticks, 26 kernel ticks, 3 user ticks
+Timer: 63 ticks
+Thread: 31 idle ticks, 29 kernel ticks, 3 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 119 reads, 304 writes
 hd1:0: 133 reads, 0 writes
-Console: 1110 characters output
+Console: 1099 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

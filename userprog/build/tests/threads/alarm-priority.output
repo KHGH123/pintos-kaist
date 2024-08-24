@@ -21,32 +21,22 @@ Boot complete.
 Executing 'alarm-priority':
 (alarm-priority) begin
 (alarm-priority) Thread priority 30 woke up.
-priority 30: exit(0)
 (alarm-priority) Thread priority 29 woke up.
-priority 29: exit(0)
 (alarm-priority) Thread priority 28 woke up.
-priority 28: exit(0)
 (alarm-priority) Thread priority 27 woke up.
-priority 27: exit(0)
 (alarm-priority) Thread priority 26 woke up.
-priority 26: exit(0)
 (alarm-priority) Thread priority 25 woke up.
-priority 25: exit(0)
 (alarm-priority) Thread priority 24 woke up.
-priority 24: exit(0)
 (alarm-priority) Thread priority 23 woke up.
-priority 23: exit(0)
 (alarm-priority) Thread priority 22 woke up.
-priority 22: exit(0)
 (alarm-priority) Thread priority 21 woke up.
-priority 21: exit(0)
 (alarm-priority) end
 Execution of 'alarm-priority' complete.
-Timer: 556 ticks
-Thread: 520 idle ticks, 36 kernel ticks, 0 user ticks
+Timer: 554 ticks
+Thread: 520 idle ticks, 34 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 9 reads, 18 writes
-Console: 1407 characters output
+Console: 1197 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

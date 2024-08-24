@@ -22,15 +22,14 @@ Boot complete.
 Putting 'exec-bad-ptr' into the file system...
 Executing 'exec-bad-ptr':
 (exec-bad-ptr) begin
-(exec-bad-ptr) end
-exec-bad-ptr: exit(0)
+exec-bad-ptr: exit(-1)
 Execution of 'exec-bad-ptr' complete.
-Timer: 61 ticks
-Thread: 33 idle ticks, 27 kernel ticks, 1 user ticks
+Timer: 59 ticks
+Thread: 33 idle ticks, 26 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 82 reads, 272 writes
 hd1:0: 122 reads, 0 writes
-Console: 916 characters output
+Console: 898 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

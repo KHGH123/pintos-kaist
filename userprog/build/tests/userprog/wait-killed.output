@@ -23,18 +23,19 @@ Putting 'wait-killed' into the file system...
 Putting 'child-bad' into the file system...
 Executing 'wait-killed':
 (wait-killed) begin
-(wait-killed) end
-child-bad: exit(0)
-(wait-killed) wait(exec()) = 0
+(child-bad) begin
+load: pintos: open failed
+child-bad: exit(-1)
+(wait-killed) wait(exec()) = -1
 (wait-killed) end
 wait-killed: exit(0)
 Execution of 'wait-killed' complete.
 Timer: 66 ticks
-Thread: 34 idle ticks, 32 kernel ticks, 1 user ticks
+Thread: 33 idle ticks, 30 kernel ticks, 4 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 110 reads, 530 writes
+hd0:1: 177 reads, 530 writes
 hd1:0: 246 reads, 0 writes
-Console: 1036 characters output
+Console: 1064 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

@@ -43,41 +43,27 @@ Executing 'priority-donate-chain':
 (priority-donate-chain) thread 7 got lock
 (priority-donate-chain) thread 7 should have priority 21. Actual priority: 21
 (priority-donate-chain) thread 7 finishing with priority 21.
-thread 7: exit(0)
 (priority-donate-chain) interloper 7 finished.
-interloper 7: exit(0)
 (priority-donate-chain) thread 6 finishing with priority 18.
-thread 6: exit(0)
 (priority-donate-chain) interloper 6 finished.
-interloper 6: exit(0)
 (priority-donate-chain) thread 5 finishing with priority 15.
-thread 5: exit(0)
 (priority-donate-chain) interloper 5 finished.
-interloper 5: exit(0)
 (priority-donate-chain) thread 4 finishing with priority 12.
-thread 4: exit(0)
 (priority-donate-chain) interloper 4 finished.
-interloper 4: exit(0)
 (priority-donate-chain) thread 3 finishing with priority 9.
-thread 3: exit(0)
 (priority-donate-chain) interloper 3 finished.
-interloper 3: exit(0)
 (priority-donate-chain) thread 2 finishing with priority 6.
-thread 2: exit(0)
 (priority-donate-chain) interloper 2 finished.
-interloper 2: exit(0)
 (priority-donate-chain) thread 1 finishing with priority 3.
-thread 1: exit(0)
 (priority-donate-chain) interloper 1 finished.
-interloper 1: exit(0)
 (priority-donate-chain) main finishing with priority 0.
 (priority-donate-chain) end
 Execution of 'priority-donate-chain' complete.
-Timer: 62 ticks
-Thread: 31 idle ticks, 31 kernel ticks, 0 user ticks
+Timer: 60 ticks
+Thread: 31 idle ticks, 29 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 9 reads, 18 writes
-Console: 3274 characters output
+Console: 2994 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

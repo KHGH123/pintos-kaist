@@ -61,6 +61,17 @@ argument_passing (const char *file_name, struct intr_frame *if_) {
 	if_->rsp -= 8;
 	memset ((void *)if_->rsp, 0, 8);
 }
+
+struct thread *
+find_thread (tid_t tid){
+	struct thread *curr = thread_current ();
+	struct list_elem *e;
+	for (e = list_begin (&curr->child_list); e != list_end (&curr->child_list); e = list_next (e)) 
+		if (list_entry (e, struct thread, child_elem)->tid == tid) 
+			return list_entry (e, struct thread, child_elem);
+	return NULL;
+}
+
 /* General process initializer for initd and other process. */
 static void
 process_init (void) {
@@ -127,6 +138,7 @@ process_fork (const char *name, struct intr_frame *if_ UNUSED) {
 #ifndef VM
 /* Duplicate the parent's address space by passing this function to the
  * pml4_for_each. This is only for the project 2. */
+
 static bool
 duplicate_pte (uint64_t *pte, void *va, void *aux) {
 	struct thread *current = thread_current ();
@@ -168,11 +180,11 @@ __do_fork (void *aux) {
 	struct intr_frame if_;
 	struct thread *parent = (struct thread *) aux;
 	struct thread *current = thread_current ();
+
 	/* TODO: somehow pass the parent_if. (i.e. process_fork()'s if_) */
 	struct intr_frame *parent_if = &parent->f;
 	bool succ = true;
 
-	current->waiting_thread = parent;
 	/* 1. Read the cpu context to local stack. */
 	memcpy (&if_, parent_if, sizeof (struct intr_frame));
 	if_.R.rax = 0;
@@ -192,7 +204,6 @@ __do_fork (void *aux) {
 		goto error;
 		
 #endif
- 
 	/* TODO: Your code goes here.
 	* TODO: Hint) To duplicate the file object, use `file_duplicate`
 	* TODO:       in include/filesys/file.h. Note that parent should not return
@@ -209,7 +220,6 @@ __do_fork (void *aux) {
 	if (succ)
 		do_iret (&if_);
 
-
 	error:
 		sema_up (&parent->sema);
 		thread_exit ();
@@ -218,10 +228,16 @@ __do_fork (void *aux) {
 /* Switch the current execution context to the f_name.
  * Returns -1 on fail. */
 int
-process_exec (void *f_name) {
-	char *file_name = f_name;
+process_exec (void *file_name) {
 	bool success;
-
+	char *fn_copy;
+	/* Make a copy of FILE_NAME.
+	 * Otherwise there's a race between the caller and load(). */
+	
+	fn_copy = palloc_get_page (0);
+	if (fn_copy == NULL)
+		return TID_ERROR;
+	strlcpy (fn_copy, file_name, PGSIZE);
 	/* We cannot use the intr_frame in the thread structure.
 	 * This is because when current thread rescheduled,
 	 * it stores the execution information to the member. */
@@ -234,10 +250,10 @@ process_exec (void *f_name) {
 	process_cleanup ();
 
 	/* And then load the binary */
-	success = load (file_name, &_if);
+	success = load (fn_copy, &_if);
 
 	/* If load failed, quit. */
-	palloc_free_page (file_name);
+	palloc_free_page (fn_copy);
 	if (!success)
 		return -1;
 
@@ -264,18 +280,22 @@ process_wait (tid_t child_tid UNUSED) {
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
 	struct thread* t = find_thread (child_tid);
-	if (t) {
-		t->waiting_thread = thread_current ();
-		sema_down (&thread_current ()->wait_sema);
-	}
-	
-	return thread_current ()->exit_status;
+	int status;
+	if (!t || t->waiting_thread == thread_current ()) return -1;
+
+	t->waiting_thread = thread_current ();
+	sema_down (&t->wait_sema);
+	status = t->exit_status;
+	sema_up (&t->exit_sema);
+	thread_current ()->waiting_thread = NULL;
+	return status;
 }
 
 /* Exit the process. This function is called by thread_exit (). */
 void
 process_exit (void) {
 	struct thread *curr = thread_current ();
+	struct thread *parent = curr->waiting_thread;
 	// printf("%s exit\n", curr->name);
 	/* TODO: Your code goes here.
 	 * TODO: Implement process termination message (see
@@ -287,13 +307,11 @@ process_exit (void) {
 			curr->fd_table[i] = NULL;
 		}
 	}
-	if (curr->waiting_thread) {
-		curr->waiting_thread->exit_status = curr->exit_status;
-		sema_up (&curr->waiting_thread->wait_sema);
-	}
-	printf("%s: exit(%d)\n", curr->name, curr->exit_status);
+	sema_up (&curr->wait_sema);
+	sema_down (&curr->exit_sema);
+	file_close (curr->file);
 	process_cleanup ();
-	
+	list_remove (&thread_current ()->child_elem);
 }
 
 /* Free the current process's resources. */
@@ -407,7 +425,6 @@ load (const char *file_name, struct intr_frame *if_) {
 	int i;
 
 	char fname[64];
-
 	/* Allocate and activate page directory. */
 	t->pml4 = pml4_create ();
 	if (t->pml4 == NULL)
@@ -425,7 +442,8 @@ load (const char *file_name, struct intr_frame *if_) {
 		printf ("load: %s: open failed\n", fname);
 		goto done;
 	}
-
+	t->file = file;
+	file_deny_write (file);
 	/* Read and verify executable header. */
 	if (file_read (file, &ehdr, sizeof ehdr) != sizeof ehdr
 			|| memcmp (ehdr.e_ident, "\177ELF\2\1\1", 7)
@@ -509,7 +527,7 @@ load (const char *file_name, struct intr_frame *if_) {
 
 done:
 	/* We arrive here whether the load is successful or not. */
-	file_close (file);
+	// file_close (file);
 	return success;
 }
 

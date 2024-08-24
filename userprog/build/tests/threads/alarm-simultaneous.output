@@ -23,9 +23,6 @@ Executing 'alarm-simultaneous':
 (alarm-simultaneous) Creating 3 threads to sleep 5 times each.
 (alarm-simultaneous) Each thread sleeps 10 ticks each time.
 (alarm-simultaneous) Within an iteration, all threads should wake up on the same tick.
-thread 0: exit(0)
-thread 1: exit(0)
-thread 2: exit(0)
 (alarm-simultaneous) iteration 0, thread 0: woke up after 10 ticks
 (alarm-simultaneous) iteration 0, thread 1: woke up 0 ticks later
 (alarm-simultaneous) iteration 0, thread 2: woke up 0 ticks later
@@ -44,10 +41,10 @@ thread 2: exit(0)
 (alarm-simultaneous) end
 Execution of 'alarm-simultaneous' complete.
 Timer: 306 ticks
-Thread: 280 idle ticks, 27 kernel ticks, 0 user ticks
+Thread: 281 idle ticks, 26 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 9 reads, 18 writes
-Console: 2026 characters output
+Console: 1972 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

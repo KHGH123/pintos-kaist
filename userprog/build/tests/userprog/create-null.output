@@ -22,16 +22,14 @@ Boot complete.
 Putting 'create-null' into the file system...
 Executing 'create-null':
 (create-null) begin
-(create-null) create(NULL): 0
-(create-null) end
-create-null: exit(0)
+create-null: exit(-1)
 Execution of 'create-null' complete.
-Timer: 61 ticks
-Thread: 34 idle ticks, 25 kernel ticks, 2 user ticks
+Timer: 59 ticks
+Thread: 33 idle ticks, 25 kernel ticks, 1 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 83 reads, 274 writes
 hd1:0: 123 reads, 0 writes
-Console: 938 characters output
+Console: 891 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

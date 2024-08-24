@@ -25,7 +25,6 @@ Executing 'priority-donate-lower':
 (priority-donate-lower) Main thread should have priority 41.  Actual priority: 41.
 (priority-donate-lower) acquire: got the lock
 (priority-donate-lower) acquire: done
-acquire: exit(0)
 (priority-donate-lower) acquire must already have finished.
 (priority-donate-lower) Main thread should have priority 21.  Actual priority: 21.
 (priority-donate-lower) end
@@ -34,7 +33,7 @@ Timer: 55 ticks
 Thread: 31 idle ticks, 24 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 9 reads, 18 writes
-Console: 1240 characters output
+Console: 1223 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

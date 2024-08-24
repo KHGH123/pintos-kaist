@@ -27,15 +27,17 @@ Executing 'sm-seq-block':
 (sm-seq-block) writing "noodle"
 (sm-seq-block) close "noodle"
 (sm-seq-block) open "noodle" for verification
-(sm-seq-block) read of 512 bytes at offset 0 in "noodle" returned 9: FAILED
-sm-seq-block: exit(1)
+(sm-seq-block) verified contents of "noodle"
+(sm-seq-block) close "noodle"
+(sm-seq-block) end
+sm-seq-block: exit(0)
 Execution of 'sm-seq-block' complete.
-Timer: 64 ticks
-Thread: 34 idle ticks, 27 kernel ticks, 3 user ticks
+Timer: 63 ticks
+Thread: 32 idle ticks, 27 kernel ticks, 4 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 136 reads, 327 writes
+hd0:1: 147 reads, 327 writes
 hd1:0: 126 reads, 0 writes
-Console: 1142 characters output
+Console: 1160 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

@@ -24,15 +24,15 @@ Putting 'sample.txt' into the file system...
 Executing 'read-boundary':
 (read-boundary) begin
 (read-boundary) open "sample.txt"
-(read-boundary) read() returned 9 instead of 373: FAILED
-read-boundary: exit(1)
+(read-boundary) end
+read-boundary: exit(0)
 Execution of 'read-boundary' complete.
-Timer: 62 ticks
-Thread: 32 idle ticks, 28 kernel ticks, 2 user ticks
+Timer: 61 ticks
+Thread: 34 idle ticks, 27 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 116 reads, 302 writes
 hd1:0: 132 reads, 0 writes
-Console: 1056 characters output
+Console: 1019 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

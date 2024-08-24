@@ -25,15 +25,23 @@ Executing 'rox-child':
 (rox-child) begin
 (rox-child) open "child-rox"
 (rox-child) read "child-rox"
-(rox-child) read "child-rox": FAILED
+(rox-child) write "child-rox"
+(rox-child) exec "child-rox 1"
+(child-rox) begin
+(child-rox) try to write "child-rox"
+(child-rox) try to write "child-rox"
+(child-rox) end
+child-rox: exit(12)
+(rox-child) write "child-rox"
+(rox-child) write "child-rox": FAILED
 rox-child: exit(1)
 Execution of 'rox-child' complete.
-Timer: 66 ticks
-Thread: 36 idle ticks, 27 kernel ticks, 3 user ticks
+Timer: 69 ticks
+Thread: 35 idle ticks, 28 kernel ticks, 6 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 116 reads, 548 writes
+hd0:1: 177 reads, 549 writes
 hd1:0: 255 reads, 0 writes
-Console: 1031 characters output
+Console: 1251 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

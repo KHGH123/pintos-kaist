@@ -15,6 +15,19 @@
         "ostream": "c",
         "streambuf": "c",
         "thread": "c",
-        "lib.h": "c"
+        "lib.h": "c",
+        "chrono": "c",
+        "string_view": "c",
+        "main.h": "c",
+        "file.h": "c",
+        "loader.h": "c",
+        "debug.h": "c",
+        "malloc.h": "c",
+        "inode.h": "c",
+        "disk.h": "c",
+        "stddef.h": "c",
+        "syscall-nr.h": "c",
+        "thread.h": "c",
+        "synch.h": "c"
     }
 }

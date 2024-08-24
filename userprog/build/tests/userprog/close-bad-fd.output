@@ -22,24 +22,14 @@ Boot complete.
 Putting 'close-bad-fd' into the file system...
 Executing 'close-bad-fd':
 (close-bad-fd) begin
-Page fault at 0x8104a49260: not present error writing page in kernel context.
-Interrupt 0x0e (#PF Page-Fault Exception) at rip=800421d43c
- cr2=0000008104a49260 error=               2
-rax 0000008004240000 rbx 0000000000000000 rcx 000000000040485a rdx 000000002010124c
-rsp 0000008004240f00 rbp 0000008004240f10 rsi 0000000000000000 rdi 0000000020101234
-rip 000000800421d43c r8 0000000000000000  r9 0000000000000000 r10 0000000000000000
-r11 0000000000000212 r12 000000800421d4e7 r13 0000000000000000 r14 0000000000000000
-r15 0000000000000000 rflags 00000202
-es: 001b ds: 001b cs: 0008 ss: 0010
-Kernel PANIC at ../../userprog/exception.c:97 in kill(): Kernel bug - unexpected interrupt in kernel
-Call stack: 0x80042180de 0x800421cd46 0x800421cec5 0x8004208bcb 0x8004208fe8 0x800421d704 0x800421cf3a 0x401015 0x401073 0x401b07.
-The `backtrace' program can make call stacks useful.
-Read "Backtraces" in the "Debugging Tools" chapter
-of the Pintos documentation for more information.
-Timer: 61 ticks
-Thread: 33 idle ticks, 26 kernel ticks, 2 user ticks
+close-bad-fd: exit(-1)
+Execution of 'close-bad-fd' complete.
+Timer: 59 ticks
+Thread: 33 idle ticks, 26 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 82 reads, 272 writes
 hd1:0: 122 reads, 0 writes
-Console: 1814 characters output
-Key
+Console: 898 characters output
+Keyboard: 0 keys pressed
+Exception: 0 page faults
+Powering off...

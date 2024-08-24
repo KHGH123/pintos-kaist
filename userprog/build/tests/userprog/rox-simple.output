@@ -24,15 +24,16 @@ Executing 'rox-simple':
 (rox-simple) begin
 (rox-simple) open "rox-simple"
 (rox-simple) read "rox-simple"
-(rox-simple) read "rox-simple": FAILED
-rox-simple: exit(1)
+(rox-simple) try to write "rox-simple"
+(rox-simple) end
+rox-simple: exit(0)
 Execution of 'rox-simple' complete.
-Timer: 61 ticks
-Thread: 32 idle ticks, 27 kernel ticks, 2 user ticks
+Timer: 60 ticks
+Thread: 33 idle ticks, 25 kernel ticks, 2 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 87 reads, 274 writes
+hd0:1: 86 reads, 274 writes
 hd1:0: 123 reads, 0 writes
-Console: 984 characters output
+Console: 1001 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

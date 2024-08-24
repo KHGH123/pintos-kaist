@@ -25,15 +25,47 @@ Executing 'rox-multichild':
 (rox-multichild) begin
 (rox-multichild) open "child-rox"
 (rox-multichild) read "child-rox"
-(rox-multichild) read "child-rox": FAILED
+(rox-multichild) write "child-rox"
+(rox-multichild) exec "child-rox 5"
+(child-rox) begin
+(child-rox) try to write "child-rox"
+(child-rox) exec "child-rox 4"
+(child-rox) begin
+(child-rox) try to write "child-rox"
+(child-rox) exec "child-rox 3"
+(child-rox) begin
+(child-rox) try to write "child-rox"
+(child-rox) exec "child-rox 2"
+(child-rox) begin
+(child-rox) try to write "child-rox"
+(child-rox) exec "child-rox 1"
+(child-rox) begin
+(child-rox) try to write "child-rox"
+(child-rox) try to write "child-rox"
+(child-rox) end
+child-rox: exit(12)
+(child-rox) try to write "child-rox"
+(child-rox) end
+child-rox: exit(12)
+(child-rox) try to write "child-rox"
+(child-rox) end
+child-rox: exit(12)
+(child-rox) try to write "child-rox"
+(child-rox) end
+child-rox: exit(12)
+(child-rox) try to write "child-rox"
+(child-rox) end
+child-rox: exit(12)
+(rox-multichild) write "child-rox"
+(rox-multichild) write "child-rox": FAILED
 rox-multichild: exit(1)
 Execution of 'rox-multichild' complete.
-Timer: 66 ticks
-Thread: 35 idle ticks, 28 kernel ticks, 3 user ticks
+Timer: 83 ticks
+Thread: 35 idle ticks, 35 kernel ticks, 13 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 116 reads, 548 writes
+hd0:1: 417 reads, 549 writes
 hd1:0: 255 reads, 0 writes
-Console: 1081 characters output
+Console: 1953 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

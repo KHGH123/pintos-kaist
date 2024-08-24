@@ -22,15 +22,14 @@ Boot complete.
 Putting 'open-null' into the file system...
 Executing 'open-null':
 (open-null) begin
-(open-null) end
-open-null: exit(0)
+open-null: exit(-1)
 Execution of 'open-null' complete.
-Timer: 61 ticks
-Thread: 32 idle ticks, 28 kernel ticks, 1 user ticks
+Timer: 59 ticks
+Thread: 34 idle ticks, 24 kernel ticks, 1 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 82 reads, 272 writes
 hd1:0: 122 reads, 0 writes
-Console: 892 characters output
+Console: 877 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

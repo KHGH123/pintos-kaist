@@ -27,15 +27,17 @@ Executing 'lg-full':
 (lg-full) writing "quux"
 (lg-full) close "quux"
 (lg-full) open "quux" for verification
-(lg-full) read of 512 bytes at offset 0 in "quux" returned 9: FAILED
-lg-full: exit(1)
+(lg-full) verified contents of "quux"
+(lg-full) close "quux"
+(lg-full) end
+lg-full: exit(0)
 Execution of 'lg-full' complete.
-Timer: 66 ticks
-Thread: 38 idle ticks, 24 kernel ticks, 4 user ticks
+Timer: 67 ticks
+Thread: 34 idle ticks, 25 kernel ticks, 8 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 115 reads, 588 writes
+hd0:1: 262 reads, 588 writes
 hd1:0: 126 reads, 0 writes
-Console: 1065 characters output
+Console: 1071 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

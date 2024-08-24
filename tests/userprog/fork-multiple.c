@@ -11,6 +11,7 @@ void
 fork_and_wait (void){
   int pid;
   magic++;
+
   if ((pid = fork("child"))){
     int status = wait (pid);
     msg ("Parent: child exit status is %d", status);

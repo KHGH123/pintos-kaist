@@ -26,15 +26,16 @@ Executing 'sm-random':
 (sm-random) open "bazzle"
 (sm-random) write "bazzle" in random order
 (sm-random) read "bazzle" in random order
-(sm-random) read 13 bytes at offset 780 failed: FAILED
-sm-random: exit(1)
+(sm-random) close "bazzle"
+(sm-random) end
+sm-random: exit(0)
 Execution of 'sm-random' complete.
-Timer: 68 ticks
-Thread: 35 idle ticks, 27 kernel ticks, 6 user ticks
+Timer: 70 ticks
+Thread: 34 idle ticks, 26 kernel ticks, 10 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 239 reads, 426 writes
+hd0:1: 364 reads, 426 writes
 hd1:0: 128 reads, 0 writes
-Console: 1071 characters output
+Console: 1060 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

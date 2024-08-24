@@ -23,18 +23,18 @@ Putting 'wait-simple' into the file system...
 Putting 'child-simple' into the file system...
 Executing 'wait-simple':
 (wait-simple) begin
-(wait-simple) end
-child-simple: exit(0)
-(wait-simple) wait(exec()) = 0
+(child-simple) run
+child-simple: exit(81)
+(wait-simple) wait(exec()) = 81
 (wait-simple) end
 wait-simple: exit(0)
 Execution of 'wait-simple' complete.
-Timer: 67 ticks
-Thread: 35 idle ticks, 31 kernel ticks, 1 user ticks
+Timer: 66 ticks
+Thread: 37 idle ticks, 27 kernel ticks, 3 user ticks
 hd0:0: 0 reads, 0 writes
-hd0:1: 110 reads, 526 writes
+hd0:1: 159 reads, 526 writes
 hd1:0: 244 reads, 0 writes
-Console: 1045 characters output
+Console: 1048 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...

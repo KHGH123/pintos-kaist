@@ -214,6 +214,7 @@ thread_create (const char *name, int priority,
 	/* Initialize thread. */
 	init_thread (t, name, priority);
 	tid = t->tid = allocate_tid ();
+	list_push_back (&thread_current ()->child_list, &t->child_elem);
 
 	/* Call the kernel_thread if it scheduled.
 	 * Note) rdi is 1st argument, and rsi is 2nd argument. */
@@ -462,6 +463,8 @@ init_thread (struct thread *t, const char *name, int priority) {
 	t->waiting_thread = NULL;
 	sema_init (&t->sema, 0);
 	sema_init (&t->wait_sema, 0);
+	sema_init (&t->exit_sema, 0);
+	list_init (&t->child_list);
 
 	t->magic = THREAD_MAGIC;
 }
@@ -649,16 +652,6 @@ allocate_tid (void) {
 	lock_release (&tid_lock);
 
 	return tid;
-}
-
-struct thread *
-find_thread (tid_t tid){
-	struct list_elem *e;
-	for (e = list_begin (&ready_list); e != list_end (&ready_list); e = list_next (e))
-		if (list_entry (e, struct thread, elem)->tid == tid) 
-			return list_entry (e, struct thread, elem);
-	
-	return NULL;
 }
 
 

@@ -21,8 +21,9 @@ main (int argc UNUSED, char *argv[])
   int handle1, handle2;
   int byte_cnt;
   char *buffer;
+  test_name = "child-read";
   msg ("begin");
-	test_name = "child-read";
+	
  
   if (!isdigit (*argv[1]))
     fail ("bad command-line arguments");

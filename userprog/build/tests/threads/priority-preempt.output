@@ -26,15 +26,14 @@ Executing 'priority-preempt':
 (priority-preempt) Thread high-priority iteration 3
 (priority-preempt) Thread high-priority iteration 4
 (priority-preempt) Thread high-priority done!
-high-priority: exit(0)
 (priority-preempt) The high-priority thread should have already completed.
 (priority-preempt) end
 Execution of 'priority-preempt' complete.
-Timer: 55 ticks
-Thread: 30 idle ticks, 25 kernel ticks, 0 user ticks
+Timer: 54 ticks
+Thread: 30 idle ticks, 24 kernel ticks, 0 user ticks
 hd0:0: 0 reads, 0 writes
 hd0:1: 9 reads, 18 writes
-Console: 1159 characters output
+Console: 1136 characters output
 Keyboard: 0 keys pressed
 Exception: 0 page faults
 Powering off...
